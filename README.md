@@ -12,10 +12,10 @@ test code https://github.com/alibaba/druid/blob/master/src/test/java/com/alibaba
 
 ##jar 包大小
 
-|连接池名称|Druid|tomcat-jdbc|DBCP|BoneCP|C3P0|Proxool|
-|:--------|--------:|--------:|--------:|--------:|--------:|
-|版本|1.0.15|9.0.0.M8|1.4|0.8|0.9.1.2|0.8.3|
-|大小|1907kb|135kb|157kb|109kb|597kb|465kb|
+|连接池名称 |Druid  |tomcat-jdbc  |DBCP |BoneCP |C3P0 |Proxool  |
+|:--------|--------:|--------:|--------:|--------:|--------:|--------:|
+|版本 |1.0.15 |9.0.0.M8 |1.4  |0.8  |0.9.1.2  |0.8.3  |
+|大小 |1907kb |135kb  |157kb  |109kb  |597kb  |465kb  |
 
 **阿里巴巴就是大**
 
@@ -39,9 +39,9 @@ Java6 Benchmark Result
 
 ##Java7 Environment
 
->OS	OS X 10.8.2
->CPU	intel i7 2GHz 4 core
->JVM	java version "1.7.0_05"
+> OS	OS X 10.8.2
+> CPU	intel i7 2GHz 4 core
+> JVM	java version "1.7.0_05"
 
 Java7 Benchmark Result
 
