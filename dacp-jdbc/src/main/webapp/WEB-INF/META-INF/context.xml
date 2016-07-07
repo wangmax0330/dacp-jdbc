@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<context>
+	<!-- 简单的jndi demo -->
+	<Resource name="jdbc/test" auth=" Container " type="javax.sql.DataSource" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=utf-8" username="root" password="123456"
+		maxActive="100" maxIdle="30" maxWait="10000" />
+
+	<!-- Tomcat jdbc 连接池 JNDI -->
+	<Resource name="jdbc/tomcatDataSource" auth="Container" type="javax.sql.DataSource" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+		testWhileIdle="true" testOnBorrow="true" testOnReturn="false" validationQuery="SELECT 1" validationInterval="30000"
+		timeBetweenEvictionRunsMillis="30000" maxActive="100" minIdle="10" maxWait="10000" initialSize="10"
+		removeAbandonedTimeout="60" removeAbandoned="true" logAbandoned="true" minEvictableIdleTimeMillis="30000" jmxEnabled="true"
+		jdbcInterceptors="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"
+		username="root" password="password" driverClassName="com.mysql.jdbc.Driver"></Resource>
+
+
+</context>
