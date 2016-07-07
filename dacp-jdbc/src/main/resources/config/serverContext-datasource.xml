@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+	<bean id="springJdbcTemplate" class="com.pikai.jdbc.connection.SpringJdbcTemplate" autowire="default">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<!-- 指定数据源 :dbcpDataSource,c3p0DataSource,proxoolDataSource,druidDataSource -->
+		<property name="dataSource" ref="druidDataSource"></property>
+	</bean>
+
+	<!-- ropertyPlaceholderConfigurer可以将上下文（配置文 件）中的属性值放在另一个单独的标准java Properties文件中去。在XML文件中用${key}替换指定的properties文件中的值。这样的话，只需要对properties文件进 
+		行修改，而不用对xml配置文件进行修改。 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:config/jdbc.properties" />
+	</bean>
+
+	<!-- dacp 连接池 -->
+	<bean id="dbcpDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;autoReconnect=true&amp;characterEncoding=utf-8&amp;useOldAliasMetadataBehavior=true" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+		<!--initialSize: 初始化连接 -->
+		<property name="initialSize" value="1" />
+		<!--maxIdle: 最大空闲连接 -->
+		<property name="maxIdle" value="20" />
+		<!--minIdle: 最小空闲连接 -->
+		<property name="minIdle" value="1" />
+		<!--maxActive: 最大连接数量 -->
+		<property name="maxActive" value="100" />
+		<!--removeAbandoned: 是否自动回收超时连接 -->
+		<property name="removeAbandoned" value="true" />
+		<property name="maxWait" value="30000" />
+		<property name="validationQuery" value="SELECT 1" />
+		<!-- testOnBorrow,testOnReturn,testWhileIdle取得、返回对象和空闲时是否进行验证，检查对象是否有效，默认都为false即不验证 -->
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+	</bean>
+
+	<!-- c3p0 连接池 -->
+	<bean id="c3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!--连接池中保留的最大连接数。Default: 15 -->
+		<property name="maxPoolSize" value="20" />
+		<!--连接池中保留的最小连接数。 -->
+		<property name="minPoolSize" value="1" />
+		<!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+		<property name="initialPoolSize" value="1" />
+		<!--最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+		<property name="maxIdleTime" value="30" />
+		<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+		<property name="acquireIncrement" value="5" />
+		<!--JDBC的标准参数，用以控制数据源内加载的PreparedStatements数量。但由于预缓存的statements 属于单个connection而不是整个连接池。所以设置这个参数需要考虑到多方面的因素。 如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 
+			0 -->
+		<property name="maxStatements" value="0" />
+		<!--每60秒检查所有连接池中的空闲连接。Default: 0 -->
+		<property name="idleConnectionTestPeriod" value="60" />
+		<!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
+		<property name="acquireRetryAttempts" value="30" />
+		<!--获取连接失败将会引起所有等待连接池来获取连接的线程抛出异常。但是数据源仍有效 保留，并在下次调用getConnection()的时候继续尝试获取连接。如果设为true，那么在尝试 获取连接失败后该数据源将申明已断开并永久关闭。Default: 
+			false -->
+		<property name="breakAfterAcquireFailure" value="true" />
+		<!--因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的 时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable 等方法来提升连接测试的性能。Default: 
+			false -->
+		<property name="testConnectionOnCheckout" value="false" />
+	</bean>
+	<!-- proxool 连接池 -->
+	<bean id="proxoolDataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+		<property name="driver">
+			<value>${jdbc.driverClassName}</value>
+		</property>
+		<property name="driverUrl">
+			<value>${jdbc.url}</value>
+		</property>
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="alias" value="${jdbc.alias}" />
+		<property name="houseKeepingSleepTime" value="90000" />
+		<property name="prototypeCount" value="0" />
+		<property name="maximumConnectionCount" value="20" />
+		<property name="minimumConnectionCount" value="1" />
+		<property name="simultaneousBuildThrottle" value="50" />
+		<property name="maximumConnectionLifetime" value="14400000" />
+		<property name="houseKeepingTestSql" value="select CURRENT_DATE" />
+	</bean>
+	<!-- Druid 连接池 -->
+	<bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="driverClassName" value="${jdbc.driverClassName}"></property>
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<!-- 最大连接数 -->
+		<property name="maxActive" value="20" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+		<!-- 配置监控统计拦截的filters -->
+		<property name="filters" value="stat" />
+	</bean>
+	<!-- 数据源 BoneCP 连接池 -->
+	<bean id="boneCPDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="idleConnectionTestPeriod" value="60" /><!--检查数据库连接池中空闲连接的间隔时间，单位是分，默认值：240，如果要取消则设置为0 -->
+		<property name="idleMaxAge" value="60" /><!--连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 -->
+		<property name="maxConnectionsPerPartition" value="10" /><!--每个分区最大的连接数 -->
+		<property name="minConnectionsPerPartition" value="1" /><!--每个分区最小的连接数 -->
+		<property name="partitionCount" value="1" /><!--分区数，默认值2，最小1，推荐3-4，视应用而定 -->
+		<property name="acquireIncrement" value="2" /><!-- 当连接池中的连接耗尽的时候一次同时获取的连接数。Default: 1 -->
+		<property name="statementsCacheSize" value="10" /><!--缓存prepared statements的大小，默认值：0 -->
+		<property name="releaseHelperThreads" value="3" /><!--每个分区释放链接助理进程的数量，默认值：3 -->
+	</bean>
+	<!-- JNDI 数据源配置 -->
+	<bean id="JNDIdataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/test" />
+	</bean>
+</beans>
