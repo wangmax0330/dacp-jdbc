@@ -3,7 +3,6 @@
 
 ##测试各种数据库连接池的性能
 
-##testcase
 ```java
   Connection conn = dataSource.getConnection();
   conn.close();
@@ -20,10 +19,11 @@ test code https://github.com/alibaba/druid/blob/master/src/test/java/com/alibaba
 **阿里巴巴就是大**
 ##Java6 Environment
 >OS	OS X 10.8.2
-CPU	intel i7 2GHz 4 core
+>CPU	intel i7 2GHz 4 core
 >JVM	java version "1.6.0_37"
 
 Java6 Benchmark Result
+
 |Jdbc Connection Pool | 1 thread	| 2 threads	|5 threads	|10 threads	|20 threads	|50 threads|
 | :-------- | --------:| --------:|--------:|--------:|--------:|--------:|
 |Druid	|1,102	|1,509	|1,889	|1,904	|2,027|	1,977
@@ -36,10 +36,11 @@ Java6 Benchmark Result
 
 ##Java7 Environment
 >OS	OS X 10.8.2
-CPU	intel i7 2GHz 4 core
+>CPU	intel i7 2GHz 4 core
 >JVM	java version "1.7.0_05"
 
 Java7 Benchmark Result
+
 |Jdbc Connection Pool |	1 thread	|2 threads|	5 threads	|10 threads	|20 threads|50 threads|
 | :-------- | --------:| --------:|--------:|--------:|--------:|--------:|
 |Druid		|898|1,191	|1,324	|1,362	|1,325	|1,459
@@ -51,9 +52,9 @@ Java7 Benchmark Result
 |Proxool	|16,337	|16,187	|18,310(Exception)	|25,945	|33,706(Exception)	|39,501 (Exception)
 
 ##结论
-Druid是性能最好的数据库连接池，tomcat-jdbc和druid性能接近。
-proxool在激烈并发时会抛异常，完全不靠谱。
-c3p0和proxool都相当慢，慢到影响sql执行效率的地步。
-bonecp性能并不优越，采用LinkedTransferQueue并没有能够获得性能提升。
-除了bonecp，其他的在JDK 7上跑得比JDK 6上快
-jboss-datasource虽然稳定，但是性能很糟糕
+* Druid是性能最好的数据库连接池，tomcat-jdbc和druid性能接近。
+* proxool在激烈并发时会抛异常，完全不靠谱。
+* c3p0和proxool都相当慢，慢到影响sql执行效率的地步。
+* bonecp性能并不优越，采用LinkedTransferQueue并没有能够获得性能提升。
+* 除了bonecp，其他的在JDK 7上跑得比JDK 6上快
+* jboss-datasource虽然稳定，但是性能很糟糕
