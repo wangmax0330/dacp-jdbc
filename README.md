@@ -19,7 +19,8 @@ test code https://github.com/alibaba/druid/blob/master/src/test/java/com/alibaba
 
 **阿里巴巴就是大**
 
-##Java6 Environment
+##下面是copy的Druid github上面的测试结果(本人还没有测试,测试要考虑到并发问题,还在学习中)
+###Java6 Environment
 
 > OS	OS X 10.8.2
 > CPU	intel i7 2GHz 4 core
@@ -37,7 +38,7 @@ Java6 Benchmark Result
 |C3P0	|18,570	|19,467	|15,270	|19,294	|28,195	|66,677
 |Proxool|	16,221|	14,455|	24,688	|38,905|	48,087(Exception)	|58,238(Exception)
 
-##Java7 Environment
+###Java7 Environment
 
 > OS	OS X 10.8.2
 > CPU	intel i7 2GHz 4 core
